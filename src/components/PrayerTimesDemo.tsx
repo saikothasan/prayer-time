@@ -6,23 +6,31 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+interface PrayerTimesData {
+  date: string
+  timezone: string
+  timings: {
+    [key: string]: string
+  }
+}
+
 export default function PrayerTimesDemo() {
   const [city, setCity] = useState("")
   const [country, setCountry] = useState("")
   const [date, setDate] = useState("")
   const [method, setMethod] = useState("2")
-  const [prayerTimes, setPrayerTimes] = useState(null)
+  const [prayerTimes, setPrayerTimes] = useState<PrayerTimesData | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
     try {
       const response = await fetch(`/api/prayer-times?city=${city}&country=${country}&date=${date}&method=${method}`)
-      const data = await response.json()
+      const data: PrayerTimesData = await response.json()
 
       if (response.ok) {
         setPrayerTimes(data)
@@ -40,7 +48,7 @@ export default function PrayerTimesDemo() {
     <section className="py-20">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">Try Our Prayer Times API</h2>
-        <div className="max-w-2xl mx-auto bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
+        <div className="max-w-2xl mx-auto bg-islamic-white dark:bg-islamic-gray-800 p-8 rounded-lg shadow-md">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Label htmlFor="city">City</Label>
