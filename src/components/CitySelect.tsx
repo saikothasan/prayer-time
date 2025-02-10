@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from "react"
 
-export default function CitySelect({ country, selectedCity, onSelectCity }) {
-  const [cities, setCities] = useState([])
+interface CitySelectProps {
+  country: string
+  selectedCity: string
+  onSelectCity: (city: string) => void
+}
+
+export default function CitySelect({ country, selectedCity, onSelectCity }: CitySelectProps) {
+  const [cities, setCities] = useState<string[]>([])
   const [search, setSearch] = useState("")
 
   useEffect(() => {
@@ -34,7 +40,7 @@ export default function CitySelect({ country, selectedCity, onSelectCity }) {
 
   return (
     <div>
-      <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         Select City
       </label>
       <input
@@ -42,13 +48,13 @@ export default function CitySelect({ country, selectedCity, onSelectCity }) {
         placeholder="Search cities"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-2 border rounded mb-2"
+        className="w-full p-2 border rounded mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
       />
       <select
         id="city"
         value={selectedCity}
         onChange={(e) => onSelectCity(e.target.value)}
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         disabled={!country}
       >
         <option value="">Select a city</option>
