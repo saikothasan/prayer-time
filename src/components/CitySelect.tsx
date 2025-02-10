@@ -8,6 +8,12 @@ interface CitySelectProps {
   onSelectCity: (city: string) => void
 }
 
+interface CityApiResponse {
+  error: boolean
+  msg: string
+  data: string[]
+}
+
 export default function CitySelect({ country, selectedCity, onSelectCity }: CitySelectProps) {
   const [cities, setCities] = useState<string[]>([])
   const [search, setSearch] = useState("")
@@ -22,7 +28,7 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
         body: JSON.stringify({ country }),
       })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: CityApiResponse) => {
           if (data.error === false && Array.isArray(data.data)) {
             setCities(data.data)
           } else {
@@ -40,7 +46,7 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
 
   return (
     <div>
-      <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      <label htmlFor="city" className="block text-sm font-medium text-islamic-gray-700 dark:text-islamic-gray-300 mb-1">
         Select City
       </label>
       <input
@@ -48,13 +54,13 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
         placeholder="Search cities"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-2 border rounded mb-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        className="w-full p-2 border rounded mb-2 dark:bg-islamic-gray-700 dark:border-islamic-gray-600 dark:text-islamic-white"
       />
       <select
         id="city"
         value={selectedCity}
         onChange={(e) => onSelectCity(e.target.value)}
-        className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        className="w-full p-2 border rounded dark:bg-islamic-gray-700 dark:border-islamic-gray-600 dark:text-islamic-white"
         disabled={!country}
       >
         <option value="">Select a city</option>
