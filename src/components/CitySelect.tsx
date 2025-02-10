@@ -28,10 +28,15 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
         body: JSON.stringify({ country }),
       })
         .then((response) => response.json())
-        .then((data: CityApiResponse) => {
-          if (data.error === false && Array.isArray(data.data)) {
-            setCities(data.data)
+        .then((data: unknown) => {
+          if (isCityApiResponse(data)) {
+            if (!data.error && Array.isArray(data.data)) {
+              setCities(data.data)
+            } else {
+              setCities([])
+            }
           } else {
+            console.error("Unexpected API response format")
             setCities([])
           }
         })
@@ -43,6 +48,17 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
   }, [country])
 
   const filteredCities = cities.filter((city) => city.toLowerCase().includes(search.toLowerCase()))
+
+  function isCityApiResponse(data: unknown): data is CityApiResponse {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "error" in data &&
+      "msg" in data &&
+      "data" in data &&
+      Array.isArray((data as CityApiResponse).data)
+    )
+  }
 
   return (
     <div>
