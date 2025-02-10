@@ -14,6 +14,12 @@ interface PrayerTimesData {
   }
 }
 
+interface ErrorResponse {
+  error: string
+}
+
+type ApiResponse = PrayerTimesData | ErrorResponse
+
 export default function PrayerTimesDemo() {
   const [city, setCity] = useState("")
   const [country, setCountry] = useState("")
@@ -30,12 +36,16 @@ export default function PrayerTimesDemo() {
 
     try {
       const response = await fetch(`/api/prayer-times?city=${city}&country=${country}&date=${date}&method=${method}`)
-      const data: PrayerTimesData = await response.json()
+      const data: ApiResponse = await response.json()
 
       if (response.ok) {
-        setPrayerTimes(data)
+        if ("timings" in data) {
+          setPrayerTimes(data)
+        } else {
+          setError("Unexpected response format")
+        }
       } else {
-        setError(data.error || "Failed to fetch prayer times")
+        setError("error" in data ? data.error : "An error occurred")
       }
     } catch (err) {
       setError("An error occurred while fetching prayer times")
