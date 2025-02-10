@@ -2,7 +2,20 @@
 
 import { useState } from "react"
 
-export default function CountrySelect({ countries, selectedCountry, onSelectCountry }) {
+interface Country {
+  name: {
+    common: string
+  }
+  cca2: string
+}
+
+interface CountrySelectProps {
+  countries: Country[]
+  selectedCountry: string
+  onSelectCountry: (country: string) => void
+}
+
+export default function CountrySelect({ countries, selectedCountry, onSelectCountry }: CountrySelectProps) {
   const [search, setSearch] = useState("")
 
   const filteredCountries = countries.filter((country) =>
@@ -11,7 +24,10 @@ export default function CountrySelect({ countries, selectedCountry, onSelectCoun
 
   return (
     <div>
-      <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+      <label
+        htmlFor="country"
+        className="block text-sm font-medium text-islamic-gray-700 dark:text-islamic-gray-300 mb-1"
+      >
         Select Country
       </label>
       <input
@@ -19,13 +35,13 @@ export default function CountrySelect({ countries, selectedCountry, onSelectCoun
         placeholder="Search countries"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-2 border rounded mb-2"
+        className="w-full p-2 border rounded mb-2 dark:bg-islamic-gray-700 dark:border-islamic-gray-600 dark:text-islamic-white"
       />
       <select
         id="country"
         value={selectedCountry}
         onChange={(e) => onSelectCountry(e.target.value)}
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded dark:bg-islamic-gray-700 dark:border-islamic-gray-600 dark:text-islamic-white"
       >
         <option value="">Select a country</option>
         {filteredCountries.map((country) => (
