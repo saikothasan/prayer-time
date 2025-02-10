@@ -4,7 +4,7 @@ import About from "../components/About"
 import FAQ from "../components/FAQ"
 import PrayerTimesDemo from "../components/PrayerTimesDemo"
 import CTASection from "../components/CTASection"
-import LocationSelector from "../components/LocationSelector"
+import LocationSelectorWrapper from "../components/LocationSelectorWrapper"
 
 export const metadata = {
   title: "Prayer Times API - Accurate Islamic Prayer Times for Developers",
@@ -40,12 +40,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <LocationSelector
-        onLocationSelected={(country, city) => {
-          console.log(`Selected location: ${city}, ${country}`)
-          // You can add additional logic here if needed
-        }}
-      />
+      <LocationSelectorWrapper />
       <Features />
       <PrayerTimesDemo />
       <About />
