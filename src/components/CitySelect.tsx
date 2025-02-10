@@ -28,9 +28,10 @@ export default function CitySelect({ country, selectedCity, onSelectCity }: City
         body: JSON.stringify({ country }),
       })
         .then((response) => response.json())
-        .then((data: CityApiResponse) => {
-          if (data.error === false && Array.isArray(data.data)) {
-            setCities(data.data)
+        .then((data: unknown) => {
+          const cityData = data as CityApiResponse
+          if (cityData.error === false && Array.isArray(cityData.data)) {
+            setCities(cityData.data)
           } else {
             setCities([])
           }
