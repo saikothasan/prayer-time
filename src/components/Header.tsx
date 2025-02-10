@@ -16,10 +16,10 @@ export default function Header() {
     <header className="bg-islamic-white dark:bg-islamic-gray-900 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <Link href="/" className="text-2xl font-bold text-islamic-green dark:text-islamic-green-light">
+          <Link href="/" className="text-xl sm:text-2xl font-bold text-islamic-green dark:text-islamic-green-light">
             Prayer Times API
           </Link>
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex space-x-4 lg:space-x-6">
             <Link
               href="/"
               className="text-islamic-gray-700 dark:text-islamic-gray-300 hover:text-islamic-green dark:hover:text-islamic-green-light transition-colors duration-300"
@@ -70,7 +70,17 @@ export default function Header() {
               )}
             </button>
           </div>
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-md hover:bg-islamic-gray-200 dark:hover:bg-islamic-gray-700 transition-colors duration-300 mr-2"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-5 w-5 text-islamic-gold" />
+              ) : (
+                <Moon className="h-5 w-5 text-islamic-blue" />
+              )}
+            </button>
             <button onClick={toggleMobileMenu} className="p-2 text-islamic-gray-700 dark:text-islamic-gray-300">
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
