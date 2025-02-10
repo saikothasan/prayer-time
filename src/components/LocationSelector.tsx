@@ -19,14 +19,38 @@ export default function LocationSelector() {
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
-      .then((data: Country[]) => {
-        const sortedCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common))
-        setCountries(sortedCountries)
+      .then((data: unknown) => {
+        if (isCountryArray(data)) {
+          const sortedCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common))
+          setCountries(sortedCountries)
+        } else {
+          console.error("Unexpected API response format")
+          setCountries([])
+        }
       })
       .catch((err) => {
         console.error("Error fetching countries:", err)
+        setCountries([])
       })
   }, [])
+
+  function isCountryArray(data: unknown): data is Country[] {
+    return Array.isArray(data) && data.every(isCountry)
+  }
+
+  function isCountry(item: unknown): item is Country {
+    return (
+      typeof item === "object" &&
+      item !== null &&
+      "name" in item &&
+      typeof item.name === "object" &&
+      item.name !== null &&
+      "common" in item.name &&
+      typeof item.name.common === "string" &&
+      "cca2" in item &&
+      typeof item.cca2 === "string"
+    )
+  }
 
   return (
     <section className="py-12 bg-islamic-beige-light dark:bg-islamic-gray-900">
