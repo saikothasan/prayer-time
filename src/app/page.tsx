@@ -4,6 +4,7 @@ import About from "../components/About"
 import FAQ from "../components/FAQ"
 import PrayerTimesDemo from "../components/PrayerTimesDemo"
 import CTASection from "../components/CTASection"
+import LocationSelector from "../components/LocationSelector"
 
 export const metadata = {
   title: "Prayer Times API - Accurate Islamic Prayer Times for Developers",
@@ -39,6 +40,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <LocationSelector />
       <Features />
       <PrayerTimesDemo />
       <About />
