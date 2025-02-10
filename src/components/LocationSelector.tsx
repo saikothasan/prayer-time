@@ -12,6 +12,14 @@ interface Country {
   cca2: string
 }
 
+interface PrayerTimesData {
+  date: string
+  timezone: string
+  timings: {
+    [key: string]: string
+  }
+}
+
 interface LocationSelectorProps {
   onLocationSelected: (country: string, city: string) => void
 }
@@ -20,7 +28,7 @@ export default function LocationSelector({ onLocationSelected }: LocationSelecto
   const [countries, setCountries] = useState<Country[]>([])
   const [selectedCountry, setSelectedCountry] = useState("")
   const [selectedCity, setSelectedCity] = useState("")
-  const [prayerTimes, setPrayerTimes] = useState<any>(null)
+  const [prayerTimes, setPrayerTimes] = useState<PrayerTimesData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -67,16 +75,38 @@ export default function LocationSelector({ onLocationSelected }: LocationSelecto
     )
   }
 
+  function isPrayerTimesData(data: unknown): data is PrayerTimesData {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "date" in data &&
+      typeof data.date === "string" &&
+      "timezone" in data &&
+      typeof data.timezone === "string" &&
+      "timings" in data &&
+      typeof data.timings === "object" &&
+      data.timings !== null
+    )
+  }
+
   async function fetchPrayerTimes(country: string, city: string) {
     setLoading(true)
     setError(null)
     try {
       const response = await fetch(`/api/prayer-times?country=${country}&city=${city}`)
-      const data = await response.json()
+      const data: unknown = await response.json()
       if (response.ok) {
-        setPrayerTimes(data)
+        if (isPrayerTimesData(data)) {
+          setPrayerTimes(data)
+        } else {
+          setError("Unexpected response format")
+        }
       } else {
-        setError(data.error || "Failed to fetch prayer times")
+        setError(
+          typeof data === "object" && data !== null && "error" in data
+            ? String(data.error)
+            : "Failed to fetch prayer times",
+        )
       }
     } catch (err) {
       setError("An error occurred while fetching prayer times")
