@@ -2,6 +2,22 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export const runtime = "edge"
 
+interface PrayerTimesResponse {
+  code: number
+  status: string
+  data: {
+    timings: {
+      [key: string]: string
+    }
+    date: {
+      readable: string
+    }
+    meta: {
+      timezone: string
+    }
+  }
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const city = searchParams.get("city")
@@ -17,7 +33,7 @@ export async function GET(req: NextRequest) {
     const response = await fetch(
       `http://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=${country}&method=${method}`,
     )
-    const data = await response.json()
+    const data: PrayerTimesResponse = await response.json()
 
     if (data.code === 200) {
       return NextResponse.json({
@@ -29,6 +45,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: data.status }, { status: data.code })
     }
   } catch (error) {
+    console.error("Error fetching prayer times:", error)
     return NextResponse.json({ error: "Failed to fetch prayer times" }, { status: 500 })
   }
 }
