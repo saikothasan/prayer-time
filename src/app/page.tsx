@@ -40,7 +40,12 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <LocationSelector />
+      <LocationSelector
+        onLocationSelected={(country, city) => {
+          console.log(`Selected location: ${city}, ${country}`)
+          // You can add additional logic here if needed
+        }}
+      />
       <Features />
       <PrayerTimesDemo />
       <About />
