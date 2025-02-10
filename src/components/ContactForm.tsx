@@ -1,25 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ChangeEvent, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 
+interface FormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
 export default function ContactForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   })
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Handle form submission (e.g., send data to an API)
     console.log("Form submitted:", formData)
